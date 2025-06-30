@@ -1,59 +1,57 @@
-"use client"
-import { useState } from "react";
+// app/page.tsx (Next.js 13+ App Router)
+'use client';
 
-export default function Home() {
-  const [prompt, setPrompt] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+import { useEffect, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
+import { supabase } from '@/lib/supabase';
 
-  const generateVideo = async () => {
-    setLoading(true);
-    setError("");
-    setVideoUrl("");
-    
-    const res = await fetch("https://ginigen-veo3-directors.hf.space/gradio_api/queue/data?session_hash=9u2gqi1pvqo", {
-      method: "POST",
-      headers: { "Content-Type": "text/event-stream; charset=utf-8" },
-      body: JSON.stringify({ prompt }),
-    });
+interface ImageData {
+  id: string;
+  prompt: string;
+  image_url: string;
+}
 
-    const data = await res.json();
+export default function GalleryPage() {
+  const [search, setSearch] = useState('');
+  const [images, setImages] = useState<ImageData[]>([]);
 
-    if (res.ok) {
-      setVideoUrl(data.videoUrl);
-    } else {
-      setError(data.error || "Generation failed");
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  async function fetchImages() {
+    const { data, error } = await supabase.from('images').select('*').order('created_at', { ascending: false });
+    if (!error && data) {
+      setImages(data);
     }
+  }
 
-    setLoading(false);
-  };
+  const filteredImages = images.filter(img =>
+    img.prompt.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <main className="flex flex-col items-center p-8 gap-4">
-      <h1 className="text-2xl font-bold">🎬 VEO3 视频生成器</h1>
-
-      <input
+    <div className="max-w-6xl mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4 text-center">VEO3 Prompt Gallery</h1>
+      <Input
         type="text"
-        placeholder="输入一个场景描述..."
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        className="w-full max-w-md p-2 border rounded"
+        placeholder="Search prompts..."
+        className="mb-6"
+        value={search}
+        onChange={e => setSearch(e.target.value)}
       />
 
-      <button
-        onClick={generateVideo}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        disabled={loading || !prompt}
-      >
-        {loading ? "生成中..." : "生成视频"}
-      </button>
-
-      {error && <p className="text-red-500">{error}</p>}
-
-      {videoUrl && (
-        <video src={videoUrl} controls className="w-full max-w-2xl rounded shadow" />
-      )}
-    </main>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {filteredImages.map(image => (
+          <Card key={image.id} className="overflow-hidden rounded-2xl shadow-md">
+            <img src={image.image_url} alt={image.prompt} className="w-full h-64 object-cover" />
+            <CardContent className="p-3">
+              <p className="text-sm text-gray-700 dark:text-gray-300">{image.prompt}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
   );
 }
