@@ -35,21 +35,21 @@ export default function GalleryPage() {
       {
         id: '1',
         prompt: 'A robot dancing in the desert',
-        image_url: 'https://via.placeholder.com/400x300?text=Robot+in+Desert',
+        image_url: 'https://x.com/Artedeingenio/status/1939248601252651046/photo/1',
         category: 'Sci-fi',
         tags: ['robot', 'desert']
       },
       {
         id: '2',
         prompt: 'A dreamy fantasy forest landscape',
-        image_url: 'https://via.placeholder.com/400x300?text=Fantasy+Forest',
+        image_url: 'https://x.com/Artedeingenio/status/1939248601252651046/photo/2',
         category: 'Nature',
         tags: ['fantasy', 'nature']
       },
       {
         id: '3',
         prompt: 'Futuristic city skyline at night',
-        image_url: 'https://via.placeholder.com/400x300?text=Futuristic+City',
+        image_url: 'https://x.com/Artedeingenio/status/1939248601252651046/photo/3',
         category: 'Sci-fi',
         tags: ['city', 'night']
       }
