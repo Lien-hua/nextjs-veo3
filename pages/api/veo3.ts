@@ -1,26 +1,40 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Only POST allowed" });
+  }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') return res.status(405).end()
-
-  const { prompt, language = 'English', enableAudio = true, cameraMotion = true } = req.body
+  const { prompt } = req.body;
 
   try {
-    console.log("哈哈哈")
-    const response = await fetch("https://ginigen--VEO3-Directors.hf.space/run/predict", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        data: [prompt, language, enableAudio, cameraMotion],
-      }),
-    })
+    const response = await fetch(
+      "https://ginigen--VEO3-Directors.hf.space/run/predict",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: [prompt] }),
+      }
+    );
 
-    const result = await response.json()
-    const videoUrl = result.data?.[0] || null
+    const contentType = response.headers.get("content-type");
+    if (!contentType?.includes("application/json")) {
+      const text = await response.text();
+      console.error("Non-JSON response from Hugging Face:", text);
+      return res.status(500).json({ error: "Unexpected response from Hugging Face" });
+    }
 
-    res.status(200).json({ videoUrl })
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ error: "Failed to generate video" })
+    const result = await response.json();
+
+    if (!result?.data?.[0]) {
+      console.error("Missing video URL in response:", result);
+      return res.status(500).json({ error: "Invalid response format" });
+    }
+
+    res.status(200).json({ videoUrl: result.data[0] });
+
+  } catch (error) {
+    console.error("Error calling Hugging Face:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }
