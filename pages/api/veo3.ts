@@ -12,7 +12,8 @@ export default async function handler(
 
   try {
     const response = await fetch(
-      "https://ginigen--VEO3-Directors.hf.space/",
+      // "https://ginigen--VEO3-Directors.hf.space/",
+      "https://ginigen-veo3-directors.hf.space/gradio_api/queue/data?session_hash=9u2gqi1pvqo",
       {
         method: "POST",
         headers: {
