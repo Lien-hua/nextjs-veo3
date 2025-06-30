@@ -11,10 +11,10 @@ export default function Home() {
     setLoading(true);
     setError("");
     setVideoUrl("");
-
-    const res = await fetch("/api/veo3", {
+    
+    const res = await fetch("https://ginigen-veo3-directors.hf.space/gradio_api/queue/data?session_hash=9u2gqi1pvqo", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/event-stream; charset=utf-8" },
       body: JSON.stringify({ prompt }),
     });
 
