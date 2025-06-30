@@ -12,8 +12,7 @@ export default async function handler(
 
   try {
     const response = await fetch(
-      // "https://ginigen--VEO3-Directors.hf.space/run/predict",
-      "https://huggingface.co/spaces/ginigen/VEO3-Directors",
+      "https://ginigen--VEO3-Directors.hf.space/run/predict",
       {
         method: "POST",
         headers: {
