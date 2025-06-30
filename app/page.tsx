@@ -31,24 +31,28 @@ export default function GalleryPage() {
     const mockedData: ImageData[] = [
       {
         id: '1',
-        prompt: 'A robot dancing in the desert',
+        name: 'A robot dancing in the desert',
         image_url: 'https://via.placeholder.com/400x300?text=Robot+Desert',
         category: 'Sci-fi',
-        tags: ['robot', 'desert']
+        tags: ['Art Deco', 'Metropolis'],
+        prompt:'Static close-up shot from the front:  a keyboard sculpted entirely from melted chocolate. The keys are thick, glossy, and slightly deformed from the heat, with drips sliding slowly between the rows. A woman’s fingers, nails painted in glossy cherry red, gently press each soft, sticky key. With every touch, chocolate oozes and stretches slightly. ASMR: slow finger squish, subtle suction as chocolate pulls back, and a faint wet plop with each release. The lighting is warm and highlights the deep browns and glistening texture. The tone is rich, immersive, and deeply textural. No dialogue. No subtitles.
+'
       },
       {
         id: '2',
-        prompt: 'A dreamy fantasy forest landscape',
+        name: 'A dreamy fantasy forest landscape',
         image_url: 'https://via.placeholder.com/400x300?text=Fantasy+Forest',
         category: 'Nature',
-        tags: ['fantasy', 'nature']
+        tags: ['fantasy', 'nature'],
+        prompt:'Frontal streamer-style close-up shot: A fluffy capybara sits at a desk softly lit with ambient RGB lighting, facing a large microphone with a fuzzy windscreen. It wears oversized headphones and is surrounded by plushies. In a calm, whispering voice, it says: ‘Close your eyes... focus on the sounds... and relax with me.’ Its little paw gently strokes a soft velvet pillow with slow, rhythmic motions. The room is dim and cozy, washed in pastel tones. ASMR: gentle brushing, whispered breathing, headphone creaks, and faint ambient hum. The camera remains still, zoomed in slightly for intimacy. Visual tone: warm, tender, deeply soothing. No subtitles'
       },
       {
         id: '3',
-        prompt: 'Futuristic city skyline at night',
+        name: 'Futuristic city skyline at night',
         image_url: 'https://via.placeholder.com/400x300?text=City+Night',
         category: 'Sci-fi',
-        tags: ['city', 'night']
+        tags: ['city', 'night'],
+        prompt:'Static front-facing close-up shot: A young woman’s face is framed tightly from the nose down. Her lips are painted in a deep, glossy red, shining softly under cinematic lighting. She slowly lifts a translucent,  glass-like  red strawberry to her mouth. The crystal fruit glimmers with inner light and sharp texture. As she gently bites into it, the glass strawberry cracks cleanly. ASMR: high-pitched crack, subtle shards separating, soft chewing sounds, and breathy exhale. Her lips press slowly as she chews, catching reflections. Background is softly blurred, silent except for the sounds of the fruit. Visual tone: sharp, intimate, hyperreal. No dialogue. No subtitles'
       }
     ];
     setImages(mockedData);
