@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import VideoCard from '@/components/VideoCard';
+import VideoCard from '@/components/ui/VideoCard';
 
 interface VideoData {
   id: string;
