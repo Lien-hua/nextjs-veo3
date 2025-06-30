@@ -97,7 +97,9 @@ export default function GalleryPage() {
             key={tag}
             variant={selectedTag === tag ? 'default' : 'outline'}
             onClick={() => setSelectedTag(tag === selectedTag ? '' : tag)}
-            className="cursor-pointer"
+            className={`cursor-pointer text-sm px-3 py-1 rounded-full ${
+              selectedTag === tag ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
           >
             #{tag}
           </Badge>
@@ -112,7 +114,11 @@ export default function GalleryPage() {
               <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{image.prompt}</p>
               <div className="flex flex-wrap gap-1">
                 {image.tags?.map(tag => (
-                  <Badge key={tag} variant="secondary" className="text-xs">
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="text-xs bg-purple-100 text-purple-800 rounded px-2 py-1"
+                  >
                     #{tag}
                   </Badge>
                 ))}
