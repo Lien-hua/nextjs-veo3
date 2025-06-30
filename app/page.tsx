@@ -8,7 +8,8 @@ interface VideoData {
   id: string;
   title: string;
   description: string;
-  video_url: string;
+  storage_url: string; // 封面图片地址
+  public_url: string;  // 视频文件地址
   tags?: string[];
 }
 
@@ -29,7 +30,7 @@ export default function HomePage() {
     if (error) {
       console.error('Error loading videos:', error.message);
     } else {
-      setVideos(data);
+      setVideos(data as VideoData[]);
     }
 
     setLoading(false);
@@ -50,7 +51,8 @@ export default function HomePage() {
               key={video.id}
               title={video.title}
               description={video.description}
-              videoUrl={video.video_url}
+              storage_url={video.storage_url}
+              public_url={video.public_url}
               tags={video.tags}
             />
           ))}
