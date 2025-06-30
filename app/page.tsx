@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import VideoCard from '@/components/ui/VideoCard';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 
 interface VideoData {
@@ -13,20 +12,16 @@ interface VideoData {
   description: string;
   storage_url: string;
   public_url: string;
-  category?: string;
   tags?: string[];
 }
-
-const mockCategories = ['All', 'ASMR', 'Vlog', 'Tutorial', 'Shorts'];
-const mockTags = ['relax', 'chocolate', 'capybara', 'whisper', 'gaming'];
 
 export default function HomePage() {
   const [videos, setVideos] = useState<VideoData[]>([]);
   const [filteredVideos, setFilteredVideos] = useState<VideoData[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedTag, setSelectedTag] = useState('');
+  const [allTags, setAllTags] = useState<string[]>([]);
 
   useEffect(() => {
     fetchVideos();
@@ -34,7 +29,7 @@ export default function HomePage() {
 
   useEffect(() => {
     filterVideos();
-  }, [videos, search, selectedCategory, selectedTag]);
+  }, [videos, search, selectedTag]);
 
   async function fetchVideos() {
     const { data, error } = await supabase
@@ -45,10 +40,20 @@ export default function HomePage() {
     if (error) {
       console.error('Error loading videos:', error.message);
     } else {
-      setVideos(data as VideoData[]);
+      const vids = data as VideoData[];
+      setVideos(vids);
+      extractUniqueTags(vids);
     }
 
     setLoading(false);
+  }
+
+  function extractUniqueTags(videos: VideoData[]) {
+    const tagSet = new Set<string>();
+    for (const video of videos) {
+      video.tags?.forEach(tag => tagSet.add(tag));
+    }
+    setAllTags(Array.from(tagSet));
   }
 
   function filterVideos() {
@@ -58,9 +63,10 @@ export default function HomePage() {
       const matchesSearch =
         video.title.toLowerCase().includes(lowerSearch) ||
         video.description.toLowerCase().includes(lowerSearch);
-      const matchesCategory = selectedCategory === 'All' || video.category === selectedCategory;
+
       const matchesTag = !selectedTag || video.tags?.includes(selectedTag);
-      return matchesSearch && matchesCategory && matchesTag;
+
+      return matchesSearch && matchesTag;
     });
 
     setFilteredVideos(result);
@@ -78,23 +84,8 @@ export default function HomePage() {
         onChange={e => setSearch(e.target.value)}
       />
 
-      <Tabs defaultValue="All" className="mb-4">
-        <TabsList>
-          {mockCategories.map(cat => (
-            <TabsTrigger
-              key={cat}
-              value={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={selectedCategory === cat ? 'font-bold' : ''}
-            >
-              {cat}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
-
       <div className="flex flex-wrap gap-2 mb-6">
-        {mockTags.map(tag => (
+        {allTags.map(tag => (
           <Badge
             key={tag}
             variant={selectedTag === tag ? 'default' : 'outline'}
