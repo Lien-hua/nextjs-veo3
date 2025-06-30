@@ -5,49 +5,118 @@ import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/lib/supabase';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ImageData {
   id: string;
   prompt: string;
   image_url: string;
+  tags?: string[];
+  category?: string;
 }
+
+const mockCategories = ['All', 'Nature', 'Sci-fi', 'Abstract'];
+const mockTags = ['robot', 'desert', 'fantasy', 'city', 'portrait'];
 
 export default function GalleryPage() {
   const [search, setSearch] = useState('');
   const [images, setImages] = useState<ImageData[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedTag, setSelectedTag] = useState('');
 
   useEffect(() => {
     fetchImages();
   }, []);
 
   async function fetchImages() {
-    const { data, error } = await supabase.from('images').select('*').order('created_at', { ascending: false });
-    if (!error && data) {
-      setImages(data);
-    }
+    // Mocked data for testing without Supabase
+    const mockedData: ImageData[] = [
+      {
+        id: '1',
+        prompt: 'A robot dancing in the desert',
+        image_url: 'https://via.placeholder.com/400x300?text=Robot+in+Desert',
+        category: 'Sci-fi',
+        tags: ['robot', 'desert']
+      },
+      {
+        id: '2',
+        prompt: 'A dreamy fantasy forest landscape',
+        image_url: 'https://via.placeholder.com/400x300?text=Fantasy+Forest',
+        category: 'Nature',
+        tags: ['fantasy', 'nature']
+      },
+      {
+        id: '3',
+        prompt: 'Futuristic city skyline at night',
+        image_url: 'https://via.placeholder.com/400x300?text=Futuristic+City',
+        category: 'Sci-fi',
+        tags: ['city', 'night']
+      }
+    ];
+    setImages(mockedData);
   }
 
-  const filteredImages = images.filter(img =>
-    img.prompt.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredImages = images.filter(img => {
+    const matchesSearch = img.prompt.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || img.category === selectedCategory;
+    const matchesTag = !selectedTag || img.tags?.includes(selectedTag);
+    return matchesSearch && matchesCategory && matchesTag;
+  });
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-7xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4 text-center">VEO3 Prompt Gallery</h1>
+
       <Input
         type="text"
         placeholder="Search prompts..."
-        className="mb-6"
+        className="mb-4"
         value={search}
         onChange={e => setSearch(e.target.value)}
       />
+
+      <Tabs defaultValue="All" className="mb-4">
+        <TabsList>
+          {mockCategories.map(cat => (
+            <TabsTrigger
+              key={cat}
+              value={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={selectedCategory === cat ? 'font-bold' : ''}
+            >
+              {cat}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
+      <div className="flex flex-wrap gap-2 mb-6">
+        {mockTags.map(tag => (
+          <Badge
+            key={tag}
+            variant={selectedTag === tag ? 'default' : 'outline'}
+            onClick={() => setSelectedTag(tag === selectedTag ? '' : tag)}
+            className="cursor-pointer"
+          >
+            #{tag}
+          </Badge>
+        ))}
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredImages.map(image => (
           <Card key={image.id} className="overflow-hidden rounded-2xl shadow-md">
             <img src={image.image_url} alt={image.prompt} className="w-full h-64 object-cover" />
             <CardContent className="p-3">
-              <p className="text-sm text-gray-700 dark:text-gray-300">{image.prompt}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{image.prompt}</p>
+              <div className="flex flex-wrap gap-1">
+                {image.tags?.map(tag => (
+                  <Badge key={tag} variant="secondary" className="text-xs">
+                    #{tag}
+                  </Badge>
+                ))}
+              </div>
             </CardContent>
           </Card>
         ))}
