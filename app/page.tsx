@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import ImageCard from '@/components/ImageCard';
+import ImageCard from '@/components/ui/ImageCard';
 
 interface ImageData {
   id: string;
