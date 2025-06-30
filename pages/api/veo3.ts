@@ -16,7 +16,7 @@ export default async function handler(
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "text/event-stream; charset=utf-8",
         },
         body: JSON.stringify({ data: [prompt] }),
       }
