@@ -6,7 +6,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { prompt, language = 'English', enableAudio = true, cameraMotion = true } = req.body
 
   try {
-    const response = await fetch("https://your-username-veo3-api.hf.space/run/predict", {
+    
+    const response = await fetch("https://ginigen--VEO3-Directors.hf.space/run/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
