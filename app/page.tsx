@@ -1,12 +1,10 @@
-// app/page.tsx (Next.js 13+ App Router)
 'use client';
 
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
-import { supabase } from '@/lib/supabase';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import ImageCard from '@/components/ImageCard';
 
 interface ImageData {
   id: string;
@@ -30,26 +28,25 @@ export default function GalleryPage() {
   }, []);
 
   async function fetchImages() {
-    // Mocked data for testing without Supabase
     const mockedData: ImageData[] = [
       {
         id: '1',
         prompt: 'A robot dancing in the desert',
-        image_url: 'https://x.com/Artedeingenio/status/1939248601252651046/photo/1',
+        image_url: 'https://via.placeholder.com/400x300?text=Robot+Desert',
         category: 'Sci-fi',
         tags: ['robot', 'desert']
       },
       {
         id: '2',
         prompt: 'A dreamy fantasy forest landscape',
-        image_url: 'https://x.com/Artedeingenio/status/1939248601252651046/photo/2',
+        image_url: 'https://via.placeholder.com/400x300?text=Fantasy+Forest',
         category: 'Nature',
         tags: ['fantasy', 'nature']
       },
       {
         id: '3',
         prompt: 'Futuristic city skyline at night',
-        image_url: 'https://x.com/Artedeingenio/status/1939248601252651046/photo/3',
+        image_url: 'https://via.placeholder.com/400x300?text=City+Night',
         category: 'Sci-fi',
         tags: ['city', 'night']
       }
@@ -108,23 +105,7 @@ export default function GalleryPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredImages.map(image => (
-          <Card key={image.id} className="overflow-hidden rounded-2xl shadow-md">
-            <img src={image.image_url} alt={image.prompt} className="w-full h-64 object-cover" />
-            <CardContent className="p-3">
-              <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{image.prompt}</p>
-              <div className="flex flex-wrap gap-1">
-                {image.tags?.map(tag => (
-                  <Badge
-                    key={tag}
-                    variant="secondary"
-                    className="text-xs bg-purple-100 text-purple-800 rounded px-2 py-1"
-                  >
-                    #{tag}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <ImageCard key={image.id} image={image} />
         ))}
       </div>
     </div>
